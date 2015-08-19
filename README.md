@@ -19,3 +19,4 @@ avg := ma.Avg() // Will return 8.4
 In case you define a window of let's say 5 and only put in 2 values, the average will be based on those 2 values.
 
 Window 5 - Values: 2, 2  - Average: 2 (not 0.8)
+
