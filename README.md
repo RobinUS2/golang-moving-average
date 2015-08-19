@@ -3,6 +3,8 @@ Moving average implementation for Go
 
 ## Usage 
 ```
+import "github.com/RobinUS2/golang-moving-average"
+
 ma := movingaverage.New(5) // 5 is the window size
 ma.Add(10)
 ma.Add(15)
