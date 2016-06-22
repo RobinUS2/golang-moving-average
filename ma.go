@@ -1,4 +1,5 @@
 package movingaverage
+import "math"
 
 // @author Robin Verlangen
 // Moving average implementation for Go
@@ -36,6 +37,10 @@ func (ma *MovingAverage) Avg() float64 {
 }
 
 func (ma *MovingAverage) Add(val float64) {
+	if math.IsNaN(val) {
+		panic("Value to add is NaN.")
+	}
+
 	// Put into values array
 	ma.values[ma.valPos] = val
 
