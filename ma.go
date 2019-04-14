@@ -50,6 +50,10 @@ func (ma *MovingAverage) Add(values ...float64) {
 	}
 }
 
+func (ma *MovingAverage) SlotsFilled() bool {
+	return ma.slotsFilled
+}
+
 func New(window int) *MovingAverage {
 	return &MovingAverage{
 		Window : window,
