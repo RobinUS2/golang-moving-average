@@ -127,3 +127,22 @@ func TestMin(t *testing.T) {
 		t.Error(min, err)
 	}
 }
+
+func TestCount(t *testing.T) {
+	a := New(5)
+	if a.Count() != 0 {
+		t.Error(a.Count())
+	}
+	a.Add(5)
+	if a.Count() != 1 {
+		t.Error(a.Count())
+	}
+	a.Add(3, 6)
+	if a.Count() != 3 {
+		t.Error(a.Count())
+	}
+	a.Add(1, 2, 3, 4, 5)
+	if a.Count() != 5 {
+		t.Error(a.Count())
+	}
+}

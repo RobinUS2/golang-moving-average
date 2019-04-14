@@ -87,7 +87,11 @@ func (ma *MovingAverage) SlotsFilled() bool {
 }
 
 func (ma *MovingAverage) Values() []float64 {
-	return ma.values
+	return ma.filledValues()
+}
+
+func (ma *MovingAverage) Count() int {
+	return len(ma.Values())
 }
 
 func (ma *MovingAverage) Max() (float64, error) {
