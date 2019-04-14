@@ -4,19 +4,19 @@ package movingaverage
 // Moving average implementation for Go
 
 type MovingAverage struct {
-	Window int
-	values []float64
-	valPos int
+	Window      int
+	values      []float64
+	valPos      int
 	slotsFilled bool
 }
 
 func (ma *MovingAverage) Avg() float64 {
 	var sum = float64(0)
-	var c = ma.Window-1
+	var c = ma.Window - 1
 
 	// Are all slots filled? If not, ignore unused
 	if !ma.slotsFilled {
-		c = ma.valPos-1
+		c = ma.valPos - 1
 		if c < 0 {
 			// Empty register
 			return 0
@@ -54,11 +54,15 @@ func (ma *MovingAverage) SlotsFilled() bool {
 	return ma.slotsFilled
 }
 
+func (ma *MovingAverage) Values() []float64 {
+	return ma.values
+}
+
 func New(window int) *MovingAverage {
 	return &MovingAverage{
-		Window : window,
-		values : make([]float64, window),
-		valPos : 0,
-		slotsFilled : false,
+		Window:      window,
+		values:      make([]float64, window),
+		valPos:      0,
+		slotsFilled: false,
 	}
 }

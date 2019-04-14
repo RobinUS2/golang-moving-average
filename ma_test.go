@@ -45,4 +45,10 @@ func TestMovingAverage(t *testing.T) {
 
 	// test variadic add
 	a.Add(2, 4)
+
+	// get values
+	values := a.Values()
+	if len(values) != 5 {
+		t.Error()
+	}
 }
