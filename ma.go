@@ -1,9 +1,14 @@
 package movingaverage
 
-import "math"
+import (
+	"errors"
+	"math"
+)
 
 // @author Robin Verlangen
 // Moving average implementation for Go
+
+var errNoValues = errors.New("no values")
 
 type MovingAverage struct {
 	Window          int
@@ -24,6 +29,21 @@ func (ma *MovingAverage) SetIgnoreNanValues(ignoreNanValues bool) {
 
 func (ma *MovingAverage) Avg() float64 {
 	var sum = float64(0)
+	values := ma.filledValues()
+	if len(values) < 1 {
+		return 0
+	}
+	n := len(values)
+	for _, value := range values {
+		sum += value
+	}
+
+	// Finalize average and return
+	avg := sum / float64(n)
+	return avg
+}
+
+func (ma *MovingAverage) filledValues() []float64 {
 	var c = ma.Window - 1
 
 	// Are all slots filled? If not, ignore unused
@@ -31,20 +51,10 @@ func (ma *MovingAverage) Avg() float64 {
 		c = ma.valPos - 1
 		if c < 0 {
 			// Empty register
-			return 0
+			return []float64{}
 		}
 	}
-
-	// Sum values
-	var ic = 0
-	for i := 0; i <= c; i++ {
-		sum += ma.values[i]
-		ic++
-	}
-
-	// Finalize average and return
-	avg := sum / float64(ic)
-	return avg
+	return ma.values[0 : c+1]
 }
 
 func (ma *MovingAverage) Add(values ...float64) {
@@ -78,6 +88,20 @@ func (ma *MovingAverage) SlotsFilled() bool {
 
 func (ma *MovingAverage) Values() []float64 {
 	return ma.values
+}
+
+func (ma *MovingAverage) Max() (float64, error) {
+	if !ma.slotsFilled && ma.valPos == 0 {
+		return 0, errNoValues
+	}
+	best := math.MaxFloat64 * -1
+	values := ma.filledValues()
+	for _, value := range values {
+		if value > best {
+			best = value
+		}
+	}
+	return best, nil
 }
 
 func New(window int) *MovingAverage {

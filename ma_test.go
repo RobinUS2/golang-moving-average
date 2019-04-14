@@ -11,7 +11,7 @@ import (
 func TestMovingAverage(t *testing.T) {
 	a := New(5)
 	if a.Avg() != 0 {
-		t.Fail()
+		t.Error("expected 0", a.Avg())
 	}
 
 	if a.SlotsFilled() {
@@ -95,5 +95,16 @@ func TestInfIgnore(t *testing.T) {
 	}
 	if a.Avg() != 1 {
 		t.Error(a.Avg())
+	}
+}
+
+func TestMax(t *testing.T) {
+	a := New(5)
+	if max, err := a.Max(); max != 0 || err == nil {
+		t.Error(max, err)
+	}
+	a.Add(10)
+	if max, err := a.Max(); max != 10 || err != nil {
+		t.Error(max, err)
 	}
 }
