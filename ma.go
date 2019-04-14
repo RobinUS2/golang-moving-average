@@ -30,7 +30,7 @@ func (ma *MovingAverage) SetIgnoreNanValues(ignoreNanValues bool) {
 func (ma *MovingAverage) Avg() float64 {
 	var sum = float64(0)
 	values := ma.filledValues()
-	if len(values) < 1 {
+	if values == nil {
 		return 0
 	}
 	n := len(values)
@@ -51,7 +51,7 @@ func (ma *MovingAverage) filledValues() []float64 {
 		c = ma.valPos - 1
 		if c < 0 {
 			// Empty register
-			return []float64{}
+			return nil
 		}
 	}
 	return ma.values[0 : c+1]
@@ -91,13 +91,27 @@ func (ma *MovingAverage) Values() []float64 {
 }
 
 func (ma *MovingAverage) Max() (float64, error) {
+	best := math.MaxFloat64 * -1
+	values := ma.filledValues()
+	if values == nil {
+		return 0, errNoValues
+	}
+	for _, value := range values {
+		if value > best {
+			best = value
+		}
+	}
+	return best, nil
+}
+
+func (ma *MovingAverage) Min() (float64, error) {
 	if !ma.slotsFilled && ma.valPos == 0 {
 		return 0, errNoValues
 	}
-	best := math.MaxFloat64 * -1
+	best := math.MaxFloat64
 	values := ma.filledValues()
 	for _, value := range values {
-		if value > best {
+		if value < best {
 			best = value
 		}
 	}

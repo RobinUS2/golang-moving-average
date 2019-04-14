@@ -107,4 +107,23 @@ func TestMax(t *testing.T) {
 	if max, err := a.Max(); max != 10 || err != nil {
 		t.Error(max, err)
 	}
+	a.Add(100, 10000, 1000)
+	if max, err := a.Max(); max != 10000 || err != nil {
+		t.Error(max, err)
+	}
+}
+
+func TestMin(t *testing.T) {
+	a := New(5)
+	if min, err := a.Min(); min != 0 || err == nil {
+		t.Error(min, err)
+	}
+	a.Add(10)
+	if min, err := a.Min(); min != 10 || err != nil {
+		t.Error(min, err)
+	}
+	a.Add(100, 10000, 1000)
+	if min, err := a.Min(); min != 10 || err != nil {
+		t.Error(min, err)
+	}
 }
