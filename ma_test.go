@@ -4,6 +4,7 @@ package movingaverage
 // Test the moving average for Go package
 
 import (
+	"math"
 	"testing"
 )
 
@@ -50,5 +51,49 @@ func TestMovingAverage(t *testing.T) {
 	values := a.Values()
 	if len(values) != 5 {
 		t.Error()
+	}
+}
+
+func TestNaN(t *testing.T) {
+	a := New(5)
+	a.Add(1)
+	a.Add(math.NaN())
+	if !math.IsNaN(a.Avg()) {
+		t.Error()
+	}
+}
+
+func TestNaNIgnore(t *testing.T) {
+	a := New(5)
+	a.SetIgnoreNanValues(true)
+	a.Add(1)
+	a.Add(math.NaN())
+	if math.IsNaN(a.Avg()) {
+		t.Error()
+	}
+	if a.Avg() != 1 {
+		t.Error(a.Avg())
+	}
+}
+
+func TestInf(t *testing.T) {
+	a := New(5)
+	a.Add(1)
+	a.Add(math.Inf(1))
+	if !math.IsInf(a.Avg(), 0) {
+		t.Error()
+	}
+}
+
+func TestInfIgnore(t *testing.T) {
+	a := New(5)
+	a.SetIgnoreInfValues(true)
+	a.Add(1)
+	a.Add(math.Inf(1))
+	if math.IsInf(a.Avg(), 0) {
+		t.Error()
+	}
+	if a.Avg() != 1 {
+		t.Error(a.Avg())
 	}
 }

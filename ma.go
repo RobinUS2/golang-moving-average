@@ -1,13 +1,25 @@
 package movingaverage
 
+import "math"
+
 // @author Robin Verlangen
 // Moving average implementation for Go
 
 type MovingAverage struct {
-	Window      int
-	values      []float64
-	valPos      int
-	slotsFilled bool
+	Window          int
+	values          []float64
+	valPos          int
+	slotsFilled     bool
+	ignoreNanValues bool
+	ignoreInfValues bool
+}
+
+func (ma *MovingAverage) SetIgnoreInfValues(ignoreInfValues bool) {
+	ma.ignoreInfValues = ignoreInfValues
+}
+
+func (ma *MovingAverage) SetIgnoreNanValues(ignoreNanValues bool) {
+	ma.ignoreNanValues = ignoreNanValues
 }
 
 func (ma *MovingAverage) Avg() float64 {
@@ -37,6 +49,16 @@ func (ma *MovingAverage) Avg() float64 {
 
 func (ma *MovingAverage) Add(values ...float64) {
 	for _, val := range values {
+		// ignore NaN?
+		if ma.ignoreNanValues && math.IsNaN(val) {
+			continue
+		}
+
+		// ignore Inf?
+		if ma.ignoreInfValues && math.IsInf(val, 0) {
+			continue
+		}
+
 		// Put into values array
 		ma.values[ma.valPos] = val
 
