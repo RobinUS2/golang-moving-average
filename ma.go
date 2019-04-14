@@ -35,16 +35,18 @@ func (ma *MovingAverage) Avg() float64 {
 	return avg
 }
 
-func (ma *MovingAverage) Add(val float64) {
-	// Put into values array
-	ma.values[ma.valPos] = val
+func (ma *MovingAverage) Add(values ...float64) {
+	for _, val := range values {
+		// Put into values array
+		ma.values[ma.valPos] = val
 
-	// Increment value position
-	ma.valPos = (ma.valPos + 1) % ma.Window
+		// Increment value position
+		ma.valPos = (ma.valPos + 1) % ma.Window
 
-	// Did we just go back to 0, effectively meaning we filled all registers?
-	if !ma.slotsFilled && ma.valPos == 0 {
-		ma.slotsFilled = true
+		// Did we just go back to 0, effectively meaning we filled all registers?
+		if !ma.slotsFilled && ma.valPos == 0 {
+			ma.slotsFilled = true
+		}
 	}
 }
 

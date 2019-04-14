@@ -33,4 +33,7 @@ func TestMovingAverage(t *testing.T) {
 	if a.Avg() < 4.399 || a.Avg() > 4.401 {
 		t.Fail()
 	}
+
+	// test variadic add
+	a.Add(2, 4)
 }
