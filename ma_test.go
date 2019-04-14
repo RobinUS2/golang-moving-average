@@ -5,6 +5,7 @@ package movingaverage
 
 import (
 	"math"
+	"sync"
 	"testing"
 )
 
@@ -145,4 +146,28 @@ func TestCount(t *testing.T) {
 	if a.Count() != 5 {
 		t.Error(a.Count())
 	}
+}
+
+func TestConcurrent(t *testing.T) {
+	// this test needs to be run with -race flag
+	a := Concurrent(New(5))
+
+	const numRoutines = 5
+	wg := sync.WaitGroup{}
+	wg.Add(numRoutines)
+	for i := 0; i < numRoutines; i++ {
+		go func() {
+			for n := 0; n < 10; n++ {
+				a.Add(float64(n))
+			}
+			a.Avg()
+			a.Min()
+			a.Max()
+			a.Count()
+			a.Values()
+			a.SlotsFilled()
+			wg.Done()
+		}()
+	}
+	wg.Wait()
 }
