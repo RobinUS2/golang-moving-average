@@ -1,0 +1,9 @@
+language: go
+
+go:
+  - "1.12"
+
+before_install:
+  - "wget https://github.com/dominikh/go-tools/releases/download/2019.1.1/staticcheck_linux_amd64 && sudo mv staticcheck_linux_amd64 /usr/bin/staticcheck && sudo chmod +x /usr/bin/staticcheck"
+
+script: "env GO111MODULE=on ./test.sh"

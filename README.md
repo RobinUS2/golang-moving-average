@@ -1,4 +1,4 @@
-# golang-moving-average
+# golang-moving-average  [![Build Status](https://travis-ci.org/RobinUS2/golang-moving-average.svg?branch=master)](https://travis-ci.org/RobinUS2/golang-moving-average)
 Moving average implementation for Go. View [the documentation](https://godoc.org/github.com/RobinUS2/golang-moving-average).
 
 ## Usage 
