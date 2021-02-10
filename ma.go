@@ -43,6 +43,31 @@ func (ma *MovingAverage) Avg() float64 {
 	return avg
 }
 
+// Average and the standard deviation of the samples.
+func (ma *MovingAverage) AvgAndStd() (float64, float64, error) {
+	var sum = float64(0)
+	values := ma.filledValues()
+	if values == nil {
+		return 0.0, 0.0, nil
+	}
+	avg := ma.Avg()
+	n := float64(len(values))
+	if n < 2 {
+		return avg, 0.0, errNoValues
+	}
+	for _, value := range values {
+		sum += value * value
+	}
+	std := math.Sqrt((sum - n*avg) / (n - 1.0))
+	return avg, std, nil
+}
+
+// Standard deviation of the samples
+func (ma *MovingAverage) Std() (float64, error) {
+	_, std, err := ma.AvgAndStd()
+	return std, err
+}
+
 func (ma *MovingAverage) filledValues() []float64 {
 	var c = ma.Window - 1
 
