@@ -48,9 +48,9 @@ func Std(ma *MovingAverage) (float64, error) {
 	var sum = float64(0)
 	values := ma.filledValues()
 	if values == nil {
-		return 0
+		return 0, nil
 	}
-	n := len(values)
+	n := float64(len(values))
 	if n < 2 {
 		return 0, errNoValues
 	}
@@ -58,7 +58,7 @@ func Std(ma *MovingAverage) (float64, error) {
 		sum += value * value
 	}
 	avg := ma.Avg()
-	std := math.Sqrt((sum - n*avg) / float64(n-1))
+	std := math.Sqrt((sum - n*avg) / (n - 1.0))
 	return std, nil
 }
 
